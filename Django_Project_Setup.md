@@ -6,25 +6,29 @@
     ```
     # OS:Windows
     # Terminal:Git Bash  
-    virtualenv djangovenv
+    
+    $ virtualenv djangovenv
     ```  
 2. Activate Virtual environment
     ```
     # OS:Windows
     # Terminal:Git Bash
-    source djangovenv/Scripts/activate
+    
+    $ source djangovenv/Scripts/activate
     ```
 3. Install Django [🔗](https://www.djangoproject.com/download/)
     ``` 
     # OS:Windows
     # Terminal:Git Bash
-    pip3 install Django
+    
+    $ pip3 install Django
     ```
 4. Create Project with basic setup [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#creating-a-project)
     ```
     # OS:Windows
     # Terminal:Git Bash
-    django-admin startproject projectX
+    
+    $ django-admin startproject projectX
     ```
     Observe **projectX** is created.
     ```
@@ -41,15 +45,17 @@
     ```
     # OS:Windows
     # Terminal:Git Bash
-    cd projectX
-    python manage.py runserver
+    
+    $ cd projectX
+    $ python manage.py runserver
     ```
 6. Create App (within Project) [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#creating-the-polls-app)
     ```
     # OS:Windows
     # Terminal:Git Bash
     # App name is 'xapp'
-    python manage.py startapp xapp
+    
+    $ python manage.py startapp xapp
     ```
     Observe **xapp** is created.
     ```
