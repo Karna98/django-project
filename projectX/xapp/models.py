@@ -3,7 +3,7 @@ from django.utils import timezone
 # Create your models here.
 
 # Table with "Topic" name will be created
-class Topics(models.Model):
+class Topic(models.Model):
     # Title of the Topic
     # { Data Type = Characters, Max Length = 200 }
     title = models.CharField(max_length=200)
@@ -21,11 +21,11 @@ class Topics(models.Model):
     def published_ago(self):
         return timezone.now() - self.published_date
 
-# Table with "Opinions" name will be created
-class Opinions(models.Model):
-    # Referencing to ID of Topic bydefault created as primary key in 'Topics' table
-    # { Foreign Key, 'on_delete=models.CASCADE' - will be deleted when topic_id is deleted from 'Topics' table}
-    topic = models.ForeignKey(Topics, on_delete=models.CASCADE)
+# Table with "Opinion" name will be created
+class Opinion(models.Model):
+    # Referencing to ID of Topic bydefault created as primary key in 'Topic' table
+    # { Foreign Key, 'on_delete=models.CASCADE' - will be deleted when topic_id is deleted from 'Topic' table}
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     # Opinion for the topic
     # { Data Type = Characters, Max Length = 200 }
     opinion = models.CharField(max_length=200)
