@@ -107,8 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# Updated Timezone to IST
-TIME_ZONE = 'IN'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
