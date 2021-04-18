@@ -7,6 +7,7 @@
     def index(request):
         return HttpResponse
     ```
+
 2. Mapping **xapp**-*view* to **xapp**-*url* 
     ```
     # xapp/views.py
@@ -20,6 +21,7 @@
         - [view](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#path-argument-view)
         - [kwargs](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#path-argument-kwargs)
         - [name](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#path-argument-name)
+
 3. Hooking **xapp**-*url* to **projectX**-*url*
     ```
     # projectX/views.py
@@ -29,11 +31,13 @@
     ]
     ```
     - [include()](https://docs.djangoproject.com/en/3.2/ref/urls/#django.urls.include) - function allows referencing other URLconfs
+
 4. Playing with **projectX**-*settings* [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#database-setup)  
     ```
     # To migrate databases of app's present in INSTALLED_APP in projectX/settings.py
     python manage.py migrate
     ```
+
 5. Creating Models[🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-models)  
     Here we will be creating two tables named "Topic" and "Opinion".  
     - **Topic**
@@ -56,8 +60,9 @@
 
     - [Models](https://docs.djangoproject.com/en/3.2/topics/db/models/)
     - [Field Types](https://docs.djangoproject.com/en/3.2/ref/models/fields/#field-types)
+
 6. Activating models [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#activating-models)  
-    To include **xapp** in **projectX**, we need to add refrence to its configuration class in INSTALLED_APPS setting.
+    To include **xapp** in **projectX**, we need to add a reference to its configuration class in INSTALLED_APPS setting.
     ```
     # projectX/settings.py
     
@@ -69,7 +74,7 @@
 
     ```
     
-    Once the 'projectX' about 'xapp' config, lets migrate the models of 'xapp' by running following command
+    Once the 'projectX' about 'xapp' config, let's migrate the models of 'xapp' by running the following command
     ```
     $ python manage.py makemigrations xapp
     ```
@@ -81,7 +86,7 @@
     $ python manage.py sqlmigrate xapp 0001
     ```
 
-    Finally to create the models in database, run
+    Finally, to create the models in database, run
     ```
     $ python manage.py migrate
     ```
@@ -96,18 +101,19 @@
         ```
         $ python manage.py migrate
         ```
+
 7. Play with tables created using Python Shell [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#playing-with-the-api)  
-    Lets open Python shell,
+    Let's open Python shell,
     ```
     $ python manage.py shell
     ```
 
-    Once python shell opens, lets execute following commands
+    Once the python shell opens, let's execute the following commands
     - Import the model classes we just wrote
         ```
         >>> from xapp.models import Topic, Opinion
         ```
-    - Retrive all Topic
+    - Retrieve all Topic
         ```
         >>> Topic.objects.all()
         ```
@@ -142,8 +148,8 @@
         # Output : <QuerySet [<Topic: Topic object (1)>]>  
         ``` 
 
-    Observe the Output of last query. was it any helpful ? **NO**  
-    Lets fix by modiying the output in *xapp/models.py*
+    Observe the output of the last query. was it any helpful? **NO**  
+    Let's fix this by modifying the output in *xapp/models.py*
 
     To get the output as desired,
     ```
@@ -162,7 +168,7 @@
             return return '{ Opinion : "' + self.opinion + '", Votes : "' + str(self.votes) + '" }'
     ```
 
-    Lets also add custom method, 
+    Let's also add a custom method, 
     ```
     # xapp/models.py
     
@@ -173,7 +179,7 @@
             return current_date - published_date
     ```
 
-    Lets test above added methods,
+    Let's test above added methods,
     ```
     >>> from django.utils import timezone
     >>> from xapp.models import Topic, Opinion
@@ -266,11 +272,11 @@
         ```
         python manage.py createsuperuser
         ```
-        Enter desired username and press Enter
+        Enter the desired username and press Enter
         ```
         Username : admin        
         ```
-        Enter email address and press Enter
+        Enter the email address and press Enter
         ```
         Email address : admin@django.in        
         ```
@@ -281,7 +287,7 @@
         ```
         On successfully creating superuser, "_Superuser created successfully_." will be displayed
 
-        Now visit http://127.0.0.1:8000/admin/ and log it with superuser credentials created above.
+        Now visit http://127.0.0.1:8000/admin/ and log in with superuser credentials created above.
 
     - Adding **xapp** in Admin Panel
         ```
@@ -296,4 +302,261 @@
 
     - Explore the Admin Functionality by adding, editing, deleting topic and opinions. [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#explore-the-free-admin-functionality)
 
+9. Writing Views for **xapp**
+    - Understand what is a view? [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial03/#overview)
+    
+    > In Django, web pages and other content are delivered by views. Each view is represented by a Python function (or method, in the case of class-based views). Django will choose a view by examining the URL that’s requested (to be precise, the part of the URL after the domain name).
+
+    - Let's decide the Flow of the Project
+        1. Home Page (index) - Displaying all topics (from Latest to oldest).
+        2. Topic Page (topic) - It will display details of the Topic.
+        3. Opinion Page (opinion) - It will display all the opinion related to the topic page.
+        4. Votes action - Handles voting for a particular Opinion for a particular Topic. 
+
+    - Adding views
+    ```
+    # xapp/views.py
+
+    # Displays list of all topics.
+    def index(request):
+        # Display "Home Page"
+
+    # Displays all details related to a specific topic.
+    def topic(request, topic_id):
+        # Captures topic_id from URL and displays topic_id.
+
+    # Displays all details related to specific opinion
+    def opinion(request, opinion_id):
+        # Captures opinion_id from URL and displays opinion_id.
+
+    # Vote action related to specific opinion
+    def vote(request, opinion_id):
+        # Captures opinion_id from URL and displays opinion_id.
+    ```
+
+    - Adding views to urls
+    ```
+    # xapp/urls.py
+
+    urlpatterns = [
+        # /xapp/
+        path('', views.index, name='index'),
+
+        # /xapp/topic/1/
+        path('topic/<int:topic_id>/', views.topic, name='topic'),
+
+        # /xapp/opinion/1/
+        path('opinion/<int:opinion_id>/', views.opinion, name='opinion'),
+
+        # /xapp/opinion/1/vote/
+        path('opinion/<int:opinion_id>/vote', views.vote, name='vote')
+    ]
+    ```
+    
+    Once Url are saved, visit the different url defined.
+    - http://127.0.0.1:8000/xapp/
+    - http://127.0.0.1:8000/xapp/topic/5
+    - http://127.0.0.1:8000/xapp/opinion/10
+    - http://127.0.0.1:8000/xapp/opinion/9/vote
+
+10. Writing Views that actually do something [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial03/#write-views-that-actually-do-something)  
+    
+    > Each view is responsible for doing one of two things: returning an HttpResponse object containing the content for the requested page or raising an exception.
+
+    - Displaying all topics on Home Page (index)
+        ```
+        # xapp/views.py
+
+        # Displays list of all topics.
+        def index(request):
+            # Update the logic to list down all topics from database
+            # Retreiving all the topics order_by published_date. '-published_date' for descending order. 
+            listOfTopic = Topic.objects.order_by('-published_date')
+            output = '<br>'.join([ '"' + topic.title + '" published at ' + str(topic.published_date) for topic in listOfTopic])
+            return HttpResponse(output)
+        ```
+
+        Now visit http://127.0.0.1:8000/xapp/ and observe a list of all topics displayed in descending order w.r.t published_date.
+    
+    - Using Django’s template system  
+        > Your project’s TEMPLATES setting describes how Django will load and render templates. The default settings file configures a DjangoTemplates backend whose APP_DIRS option is set to True. convention, DjangoTemplates looks for a “templates” subdirectory in each of the INSTALLED_APPS.
+
+
+        1. First create a 'templates' folder inside **xapp**.
+        2. Create 'xapp' folder inside the 'templates' folder.
+        3. Create an index.html inside 'xapp' folder.
+            ```
+            # xapp/templates/xapp/index.html
+            
+            # 'topics' will be sent from index() in views.py 
+            {% if topics %}
+                <ul>
+                {% for topic in topics %}
+                    <li><a href="/xapp/topic/{{ topic.id }}/">{{ topic.title }}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No Topics are available.</p>
+            {% endif %}
+            ```
+        4. Updating index in views.py to use the template
+            ```
+            # xapp/views.py
+
+            from django.template import loader
+
+            # Displays list of all topics.
+            def index(request):
+                # Retreiving all the topics order_by published_date. '-published_date' for descending order. 
+                listOfTopic = Topic.objects.order_by('-published_date')
+                
+                # loading the lemplate
+                template = loader.get_template('xapp/index.html')
+                
+                # context variable to be sent to view
+                context = {
+                    'topics' : listOfTopic
+                }
+                return HttpResponse(template.render(context, request))
+            ```
+            One more common practice to render a template is to use render()
+
+            ```
+            # xapp/views.py
+
+            from django.shortcuts import render
+
+            # Displays list of all topics.
+            def index(request):
+                ...
+                return render(request, 'xapp/index.html', context)
+            ```
+        5. Raising a 404 Error  
+            Let's define the topic() in views.py and display details on topic.html
+            ```
+            # xapp/views.py
+
+            # Displays all details related to specific topic.
+            def topic(request, topic_id):
+                # Get details of topic with id = topic_id
+                getDetailsOfTopic = Topic.objects.get(id=topic_id)
+                context = {
+                    'topic' : getDetailsOfTopic
+                }
+                return render(request, 'xapp/topic.html', context)
+            ```
+            ```
+            # xapp/templates/xapp/topic.html
+            
+            # 'topics' will be sent from topic() in views.py
+            <h1> {{ topic.title }} </h1>
+            <p> Published at  {{ topic.published_date }} </p>
+            ```
+            Now visit, 
+            1. http://127.0.0.1:8000/xapp/topic/1
+            2. http://127.0.0.1:8000/xapp/topic/69   (Error will be thrown if topic_id=69 do not exist)
+
+            To avoid any error page, we can add try..except block to catch an exception.  
+            Updated topic() will be
+            ```
+            # xapp/views.py
+
+            from django.http import Http404
+
+            # Displays all details related to specific topic.
+            def topic(request, topic_id):
+                try:
+                    # Get details of topic with id = topic_id
+                    getDetailsOfTopic = Topic.objects.get(id=topic_id)
+                    context = {
+                        'topic' : getDetailsOfTopic
+                    }
+                except Topic.DoesNotExist:
+                    # Raising 404 Error
+                    raise Http404("Topic does not exist")
+                return render(request, 'xapp/topic.html', context)
+            ```
+            Again visit the same url and observe changes.
+
+            One more shortcut way to get object or 404 Error,
+            ```
+            # xapp/views.py
+
+            from django.shortcuts import get_object_or_404
+
+            # Displays all details related to specific topic.
+            def topic(request, topic_id):
+                # Get details of topic with id = topic_id
+                getDetailsOfTopic = get_object_or_404(Topic, id=topic_id)
+                context = {
+                    'topic' : getDetailsOfTopic
+                }
+                return render(request, 'xapp/topic.html', context)
+            ```
+            Let's get all the related opinions related to the specific topic and display it on topic.html
+            ```
+            # xapp/templates/xapp/topic.html
+            
+            # 'topics' will be sent from topic() in views.py
+            <h1> {{ topic.title }} </h1>
+            <p> Published at  {{ topic.published_date }} </p>
+            <ul>
+            {% for opinion in topic.opinion_set.all %}
+                <li>{{ opinion.opinion }}</li>
+            {% endfor %}
+            </ul>
+            ```
+            The above example shows, where we are fetching data in topic.html. This can also be done in topic() in views.py and send the result to topic.html
+
+    - [HttpResponse](https://docs.djangoproject.com/en/3.2/ref/request-response/#django.http.HttpResponse)
+    - [Settings-TEMPLATES](https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-TEMPLATES)
+    - [Settings-APP_DIRS](https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-TEMPLATES-APP_DIRS)
+    - [render()](https://docs.djangoproject.com/en/3.2/topics/http/shortcuts/#django.shortcuts.render)
+    - [get_object_or_404](https://docs.djangoproject.com/en/3.2/topics/http/shortcuts/#django.shortcuts.get_object_or_404)
+    - [Template Guide](https://docs.djangoproject.com/en/3.2/topics/templates/)
+
+11. URLs in templates
+    - Removing hardcoded URLs in templates [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial03/#removing-hardcoded-urls-in-templates)
+        ```
+        # xapp/templates/xapp/index.html
+        
+        <li><a href="/xapp/topic/{{ topic.id }}/">{{ topic.title }}</a></li>
+        ```
+        Since the above URL is hardcoded in templates, we will replace it with the `{% url %}` template tag.
+        ```
+        # xapp/templates/xapp/index.html
+        
+        # {% url '__named_url_in_xapp/urls.py__' __parameter__ %}
+        <li><a href="{% url 'topic' topic.id %}">{{ topic.title }}</a></li>
+        ```
+        Using url template, changes made in url will be reflected wherever url has been used and user don't have to change individually in the respective template.
+
+    - Namespacing URL names [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial03/#namespacing-url-names)  
+        As we can observe in **xapp**-*urls* (in 9th Point), every URL has a structure starting with '/xapp/'. This can be improvised by setting 'app_name' to the application namespace.
+        ```
+        # xapp/urls.py
+
+        app_name = 'xapp'
+
+        urlpatterns = [
+            # /xapp/
+            path('', views.index, name='index'),
+
+            # /xapp/topic/1/
+            path('topic/<int:topic_id>/', views.topic, name='topic'),
+
+            # /xapp/opinion/1/
+            path('opinion/<int:opinion_id>/', views.opinion, name='opinion'),
+
+            # /xapp/opinion/1/vote/
+            path('opinion/<int:opinion_id>/vote', views.vote, name='vote')
+        ]
+        ``` 
+        After updating **xapp**-*urls*, we have to update the hyperlink using the `{% url %}` template tag.
+        ```
+        # xapp/templates/xapp/index.html
+        
+        # {% url 'app_name:__named_url_in_xapp/urls.py__' __parameter__ %}
+        <li><a href="{% url 'xapp:topic' topic.id %}">{{ topic.title }}</a></li>
+        ```
 [🔗]()
