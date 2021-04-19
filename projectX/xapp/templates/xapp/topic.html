@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Topic</title>
+    <title>{{ topic.title }}</title>
   </head>
   <body>
     <h1>{{ topic.title }}</h1>
@@ -12,7 +12,7 @@
     <p>
         <ul>
             {% for opinion in topic.opinion_set.all %}
-                <li>{{ opinion.opinion }}</li>
+                <li><a href="{% url 'xapp:opinion' opinion.id %}">{{ opinion.opinion }}</a> ({{ opinion.votes }})</li>
             {% endfor %}
         </ul>
     </p>

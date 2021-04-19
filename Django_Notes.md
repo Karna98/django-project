@@ -559,4 +559,60 @@
         # {% url 'app_name:__named_url_in_xapp/urls.py__' __parameter__ %}
         <li><a href="{% url 'xapp:topic' topic.id %}">{{ topic.title }}</a></li>
         ```
+
+11. Forms [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial04/#write-a-minimal-form)  
+    Let's add HTML form to opinions page,
+    ```
+    # xapp/templates/xapp/opinion.html
+
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    # Using Form with method POST and action set to url for vote defined in xapp/urls.py
+    <form action="{% url 'xapp:vote' opinion.id %}" method="post">
+        # To prevent Cross Site Request Forgeries
+        {% csrf_token %}
+        <label> Like the Opinion? Show support by voting</label>
+        <input type="submit" id="{{ opinion.id }}" value="Vote">
+    </form>
+    ```
+    Now, let’s create a Django view that handles the submitted data and does something with it. Remember, we created a URLconf for the xapp application that includes this line:
+    ```
+    # /opinion/1/vote/
+    path('opinion/<int:opinion_id>/vote', views.vote, name='vote')
+    ```
+    We also created a dummy implementation of the vote() function. Let’s create a real version. Add the following
+    ```
+    # xapp/views.py
+
+    # If method is "POST"
+    if request.method =='POST':
+        # Get the Opinion with opinion_id from URL, if present else throw 404 Error
+        opinion = get_object_or_404(Opinion, pk=opinion_id)
+
+        # If opinion_id from URL matched the data obtained from request.POST then validate the vote  
+        if (int(request.POST['opinion-vote']) == opinion_id):
+            # increment vote and save the updated votes
+            ...
+
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data. This prevents data from being posted twice if a
+            # user hits the Back button.
+            return HttpResponseRedirect(reverse('xapp:opinion', args=(opinion_id, )))
+        else:
+            # Return to previous page with error message displayed
+            return HttpResponseRedirect(render(request, 'xapp/opinion.html', {
+                'opinion': opinion,
+                'error_message': "Error encountered while registering your vote",
+            }))
+    else:
+        # If method is other than "POST"
+        return HttpResponse('Method Not allowed !')
+    ```
+
+    - [Django Tutorial Part 9: Working with forms
+](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Forms)
+    - [ Avoiding race conditions using F()](https://docs.djangoproject.com/en/3.2/ref/models/expressions/#avoiding-race-conditions-using-f)
+
 [🔗]()

@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 # from django.template import loader
 from django.shortcuts import render, get_object_or_404
 # from django.http import Http404
+from django.urls import reverse
+
 from .models import Topic, Opinion
 # Create your views here.
 
@@ -33,9 +35,37 @@ def topic(request, topic_id):
 
 # Displays all details related to specific opinion
 def opinion(request, opinion_id):
-    response = "You're looking at the opinion %s."
-    return HttpResponse(response % opinion_id)
+        # Get details of topic with id = topic_id
+    getDetailsOfTOpininon = get_object_or_404(Opinion, id=opinion_id)
+    context = {
+        'opinion' : getDetailsOfTOpininon
+    }
+    return render(request, 'xapp/opinion.html', context)
 
 # Vote action related to specific opinion
 def vote(request, opinion_id):
-    return HttpResponse("You're voting for Opinion %s." % opinion_id)
+    if request.method =='POST':
+        # Get the Opinion with opinion_id from URL, if present else throw 404 Error
+        opinion = get_object_or_404(Opinion, pk=opinion_id)
+
+        # Check data type of variable using type()
+        # print(type(request.POST['opinion-vote']))
+        # print(type(opinion_id))
+
+        # If opinion_id from URL matched the data obtained from request.POST then validate the vote  
+        if (int(request.POST['opinion-vote']) == opinion_id):
+            opinion.votes += 1
+            opinion.save()
+
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data. This prevents data from being posted twice if a
+            # user hits the Back button.
+            return HttpResponseRedirect(reverse('xapp:opinion', args=(opinion_id, )))
+        else:
+            return HttpResponseRedirect(render(request, 'xapp/opinion.html', {
+                'opinion': opinion,
+                'error_message': "Error encountered while registering your vote",
+            }))
+
+    else:
+        return HttpResponse('Method Not allowed !')

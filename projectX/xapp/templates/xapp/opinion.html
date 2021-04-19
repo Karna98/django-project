@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Opinion</title>
+  </head>
+  <body>
+    <h1>Opinion - {{ opinion.id }}</h1>
+    <p>
+        {{ opinion.opinion }}
+    </p>
+    <p>
+        Total no. of votes : {{ opinion.votes }}
+    </p>
+    <p>
+        {% if error_message %}
+            <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+
+        <form action="{% url 'xapp:vote' opinion.id %}" method="post">
+            {% csrf_token %}
+            <label> Like the Opinion? Show support by voting</label>
+            <input type="hidden" name="opinion-vote" value="{{ opinion.id }}">
+            <input type="submit" id="{{ opinion.id }}" value="Vote">
+        </form>
+    </p>
+  </body>
+</html>
