@@ -680,4 +680,72 @@
     - [Generic views](https://docs.djangoproject.com/en/3.2/topics/class-based-views/)
     - [ListView](https://docs.djangoproject.com/en/3.2/ref/class-based-views/generic-display/#django.views.generic.list.ListView)
     - [DetailView](https://docs.djangoproject.com/en/3.2/ref/class-based-views/generic-display/#django.views.generic.detail.DetailView)
+14. Automated Testing [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#introducing-automated-testing)  
+    1. [What are automated tests?](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#what-are-automated-tests)
+    2. [Why you need to create tests](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#why-you-need-to-create-tests)
+
+    - Writing our first test  
+        - Identifing a bug in our application.
+
+            One of the bug in our application is that user can create topic and opinion of future dates which are listed on Home Page (in case of Topic).
+
+            To test the bug, in terminal
+            ```
+            $ python manage.py shell
+
+            # Once Python Shell open
+            >>> import datetime
+            >>> from django.utils import timezone
+            >>> from xapp.models import Topic
+            # Create a new Topic
+            >>> newTopic = Topic(title="Title Future", published_date=timezone.now() + datetime.timedelta(days=30))
+            # Observe the new topic with 30 days from now is created
+            >>> newTopic
+            # And we are able to save the topic.
+            >>> newTopic.save()
+            ```
+            Now visit http://127.0.0.1:8000/xapp/, and observe latest created Topic is listed. 
+        - Create a test to expose the bug
+            > A conventional place for an application’s tests is in the application’s tests.py file; the testing system will automatically find tests in any file whose name begins with test.
+
+            ```
+            # xapp/tests.py
+
+            import datetime
+            from django.test import TestCase
+            from django.utils import timezone
+            from .models import Topic
+
+            class TopicModelTests(TestCase):
+
+                def test_published_ago_with_future_topic(self):
+                    # published_ago() returns -ve value of days for Topics whose published_date is in the future.
+                    time = timezone.now() + datetime.timedelta(days=30)
+                    future_topic = Topic(title="Future Title",published_date=time)
+                    self.assertIs((future_topic.published_ago()).days > 0, True)
+            ```
+        - Running tests
+            ```
+            $ python manage.py test xapp
+
+            # Output : 
+                ....
+                AssertionError: False is not True
+            ```
+
+            What happened is this:  
+            1. `manage.py test xapp` looked for tests in the **xapp** application
+            2. It found a subclass of the **django.test.TestCase** class
+            3. It created a special database for the purpose of testing
+            4. It looked for test methods - ones whose names begin with **test**
+            5. In **test_published_ago_with_future_topic** it created a **Topic** instance whose **published_date** field is 30 days in the future
+            6. Using the **assertIs()** method, it discovered that its **published_ago()** returns **False**, though we wanted it to return **True**
+                
+            The test informs us which test failed and even the line on which the failure occurred
+        - Fixing the bug  
+            After identifying the bug, we fix the bug and make the application more robust.
+    - [TestCase](https://docs.djangoproject.com/en/3.2/topics/testing/tools/#django.test.TestCase)
+    - [Understanding more comprehensive test](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#more-comprehensive-tests)
+    - [When testing, more is better](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#when-testing-more-is-better)
+
 [🔗]()
