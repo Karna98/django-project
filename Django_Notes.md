@@ -143,7 +143,7 @@
         >>> newTopic.title = 'Title 1.1'
         >>> newTopic.save()
 
-        # objects.all() displays all the questions in the database.
+        # objects.all() displays all the topics in the database.
         >>> Topic.objects.all()
         # Output : <QuerySet [<Topic: Topic object (1)>]>  
         ``` 
@@ -766,4 +766,5 @@
         ```
     5. To reflect the changes, restart the server.
     - [Adding a background-image](https://docs.djangoproject.com/en/3.2/intro/tutorial06/#adding-a-background-image)
-[🔗]()
+16. Customize the admin form [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial07/#customize-the-admin-form)  
+    To be added ..
