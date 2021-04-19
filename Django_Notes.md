@@ -615,4 +615,69 @@
 ](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Forms)
     - [ Avoiding race conditions using F()](https://docs.djangoproject.com/en/3.2/ref/models/expressions/#avoiding-race-conditions-using-f)
 
+13. Use generic views: Less code is better[🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial04/#use-generic-views-less-code-is-better)  
+    > Generic views abstract common patterns to the point where you don’t even need to write Python code to write an app.
+
+    - There are two types of Generic View we will be using ListView and DetailView.  
+        - ListView - the concepts of “display a list of objects”
+        - DetailView - the concepts of “display a detail page for a particular type of object.”
+
+    Based on above concept, we will use **ListView** for **index()** and **DetailView** for **topic()** and **opinion()** in xapp/views.py
+
+    - Updating urls for generic views
+        ```
+        # xapp/urls.py
+
+        urlpatterns = [
+            # /xapp/
+            # Generic View 
+            path('', views.IndexView.as_view(), name='index'),
+
+            # /xapp/topic/1/
+            # Generic View
+            path('topic/<int:pk>/', views.TopicView.as_view(), name='topic'),
+
+            # /xapp/opinion/1/
+            # Generic View
+            path('opinion/<int:pk>/', views.OpinionView.as_view(), name='opinion'),
+
+            # /xapp/opinion/1/vote/
+            path('opinion/<int:opinion_id>/vote', views.vote, name='vote')
+        ]
+        ```
+        Observe for generic view, we are using `<int:pk>` instead of `<int:model_id>`.
+    - Replacing index(), topic(), opinion() for generic views
+        ```
+        # xapp/views.py
+
+        # Displays list of all topics.
+        # Generic List View
+        class IndexView(generic.ListView):
+            template_name = 'xapp/index.html'
+            context_object_name = 'topics'
+
+            def get_queryset(self):
+                # Retreiving all the topics order_by published_date. '-published_date' for descending order.
+                return Topic.objects.order_by('-published_date')
+
+        # Displays all details related to specific topic.
+        # Generic Detail View
+        class TopicView(generic.DetailView):
+            model = Topic
+            template_name = 'xapp/topic.html'
+
+        # Displays all details related to specific opinion
+        # Generic Detail View
+        class OpinionView(generic.DetailView):
+            model = Opinion
+            template_name = 'xapp/opinion.html'
+
+        # Vote action related to specific opinion
+        def vote(request, opinion_id):
+            ... 
+            # same as above, no changes needed.
+        ```
+    - [Generic views](https://docs.djangoproject.com/en/3.2/topics/class-based-views/)
+    - [ListView](https://docs.djangoproject.com/en/3.2/ref/class-based-views/generic-display/#django.views.generic.list.ListView)
+    - [DetailView](https://docs.djangoproject.com/en/3.2/ref/class-based-views/generic-display/#django.views.generic.detail.DetailView)
 [🔗]()

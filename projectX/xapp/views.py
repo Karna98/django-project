@@ -4,10 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 # from django.http import Http404
 from django.urls import reverse
+from django.views import generic
 
 from .models import Topic, Opinion
 # Create your views here.
 
+'''
 # Displays list of all topics.
 def index(request):
     # Retreiving all the topics order_by published_date. '-published_date' for descending order. 
@@ -23,7 +25,19 @@ def index(request):
     
     # return HttpResponse(template.render(context, request))
     return render(request, 'xapp/index.html', context)
+'''
 
+# Displays list of all topics.
+# Generic List View
+class IndexView(generic.ListView):
+    template_name = 'xapp/index.html'
+    context_object_name = 'topics'
+
+    def get_queryset(self):
+        # Retreiving all the topics order_by published_date. '-published_date' for descending order.
+        return Topic.objects.order_by('-published_date')
+
+'''
 # Displays all details related to specific topic.
 def topic(request, topic_id):
     # Get details of topic with id = topic_id
@@ -32,7 +46,15 @@ def topic(request, topic_id):
         'topic' : getDetailsOfTopic
     }
     return render(request, 'xapp/topic.html', context)
+'''
 
+# Displays all details related to specific topic.
+# Generic Detail View
+class TopicView(generic.DetailView):
+    model = Topic
+    template_name = 'xapp/topic.html'
+
+'''
 # Displays all details related to specific opinion
 def opinion(request, opinion_id):
         # Get details of topic with id = topic_id
@@ -41,6 +63,13 @@ def opinion(request, opinion_id):
         'opinion' : getDetailsOfTOpininon
     }
     return render(request, 'xapp/opinion.html', context)
+'''
+
+# Displays all details related to specific opinion
+# Generic Detail View
+class OpinionView(generic.DetailView):
+    model = Opinion
+    template_name = 'xapp/opinion.html'
 
 # Vote action related to specific opinion
 def vote(request, opinion_id):
