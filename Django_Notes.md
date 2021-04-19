@@ -381,7 +381,6 @@
     - Using Django’s template system  
         > Your project’s TEMPLATES setting describes how Django will load and render templates. The default settings file configures a DjangoTemplates backend whose APP_DIRS option is set to True. convention, DjangoTemplates looks for a “templates” subdirectory in each of the INSTALLED_APPS.
 
-
         1. First create a 'templates' folder inside **xapp**.
         2. Create 'xapp' folder inside the 'templates' folder.
         3. Create an index.html inside 'xapp' folder.
@@ -748,4 +747,23 @@
     - [Understanding more comprehensive test](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#more-comprehensive-tests)
     - [When testing, more is better](https://docs.djangoproject.com/en/3.2/intro/tutorial05/#when-testing-more-is-better)
 
+15. Customize your app’s look and feel [🔗](https://docs.djangoproject.com/en/3.2/intro/tutorial06/#customize-your-app-s-look-and-feel)  
+    1. First create a 'static' folder inside **xapp**.
+    2. Create 'xapp' folder inside the 'static' folder.
+    3. Create an style.css inside 'xapp' folder.
+        ```
+        # xapp/static/xapp/style.css
+        
+        # Write your css code to beautify your webpages
+        ```
+    4. Add the css to your html pages
+        ```
+        # xapp/templates/xapp/index.html
+
+        {% load static %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'xapp/style.css' %}">
+        ```
+    5. To reflect the changes, restart the server.
+    - [Adding a background-image](https://docs.djangoproject.com/en/3.2/intro/tutorial06/#adding-a-background-image)
 [🔗]()

@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Home</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'xapp/style.css' %}"
+    />
   </head>
+
   <body>
-    {% if topics %}
-        <ul>
-        {% for topic in topics %}
-            <li><a href="{% url 'xapp:topic' topic.id %}">{{ topic.title }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
+    <div class="content">
+      <table>
+        {% if topics %} {% for topic in topics %}
+        <tr>
+          <td class="main-cell">
+            <a href="{% url 'xapp:topic' topic.id %}">{{ topic.title }}</a>
+          </td>
+          <td>{{ topic.published_date }}</td>
+        </tr>
+        {% endfor %} {% else %}
         <p>No Topics are available.</p>
-    {% endif %}
+        {% endif %}
+      </table>
+    </div>
   </body>
 </html>

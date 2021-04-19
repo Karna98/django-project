@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>{{ topic.title }}</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'xapp/style.css' %}"
+    />
   </head>
   <body>
-    <h1>{{ topic.title }}</h1>
-    <p>
-        Published at {{ topic.published_date }}
-    </p>
-    <p>
-        <ul>
-            {% for opinion in topic.opinion_set.all %}
-                <li><a href="{% url 'xapp:opinion' opinion.id %}">{{ opinion.opinion }}</a> ({{ opinion.votes }})</li>
-            {% endfor %}
-        </ul>
-    </p>
+    <div class="content">
+      <div class="header">
+        <h1>{{ topic.title }}</h1>
+        <h3>Published at {{ topic.published_date }}</h3>
+      </div>
+      <table>
+        {% for opinion in topic.opinion_set.all %}
+        <tr>
+          <td class="main-cell">
+            <a href="{% url 'xapp:opinion' opinion.id %}"
+              >{{ opinion.opinion }}</a
+            >
+          </td>
+          <td>{{ opinion.votes }} Votes</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
   </body>
 </html>

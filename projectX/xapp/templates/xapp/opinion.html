@@ -1,28 +1,51 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Opinion</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'xapp/style.css' %}"
+    />
   </head>
   <body>
-    <h1>Opinion - {{ opinion.id }}</h1>
-    <p>
-        {{ opinion.opinion }}
-    </p>
-    <p>
-        Total no. of votes : {{ opinion.votes }}
-    </p>
-    <p>
-        {% if error_message %}
-            <p><strong>{{ error_message }}</strong></p>
-        {% endif %}
-
-        <form action="{% url 'xapp:vote' opinion.id %}" method="post">
+    <div class="content">
+      <div class="header">
+        <h1>Opinion - {{ opinion.id }}</h1>
+        <h3>{{ opinion.opinion }}</h3>
+      </div>
+      <table>
+        <tr>
+          <td class="main-cell">Total no. of votes :</td>
+          <td>{{ opinion.votes }} Votes</td>
+        </tr>
+        <tr>
+          {% if error_message %}
+          <p><strong>{{ error_message }}</strong></p>
+          {% endif %}
+          <form action="{% url 'xapp:vote' opinion.id %}" method="post">
             {% csrf_token %}
-            <label> Like the Opinion? Show support by voting</label>
-            <input type="hidden" name="opinion-vote" value="{{ opinion.id }}">
-            <input type="submit" id="{{ opinion.id }}" value="Vote">
-        </form>
-    </p>
+            <td class="main-cell">
+              <label> Like the Opinion? Show support by voting</label>
+            </td>
+            <td>
+              <input
+                type="hidden"
+                name="opinion-vote"
+                value="{{ opinion.id }}"
+              />
+              <input
+                class="button"
+                type="submit"
+                id="{{ opinion.id }}"
+                value="Vote"
+              />
+            </td>
+          </form>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>
