@@ -40,5 +40,12 @@ On above premise let's build an REST API's using Django REST Framework.
     | */opinions/{**id**}/topic* | GET | Display topic related to opinion with ID = `id` |
 
     We are going to set base URL as ***apix/***. So every URL will look like ***/apix/endpoint_described_above***.    
-    Since we have defined what will be our endpoints and urls, lets proceed with coding
-2. 
+    Since we have defined what will be our endpoints and urls, lets proceed with coding.
+2. Create new file **urls.py** and **serializers.py** in **apix**.
+    ```
+    - urls.py 
+        1. In this file we will list all endpoints.
+    - serializers.py 
+        1. In this file we will defined serialization and validation of objects(data) to be send as response or received over request.  
+        2. Serialization means converting object to JSON format and Deserialization is vice versa of Serialization.
+    ```
