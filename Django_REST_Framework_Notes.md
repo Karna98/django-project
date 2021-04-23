@@ -144,3 +144,34 @@ On above premise let's build an REST API's using Django REST Framework.
     In the above layout, we have defined two views viz. list and detail view.
     1. For List View, it will display all the topic using **GET** Method and also we can create an new topic using **POST** Method.
     2. For Detail View, it will capture `id` or `pk` from URL and related to specific `id` will display topic using **GET** Method or update details of topic using **PUT** Method or delete topic using **DELETE** Method.
+
+6. Defining URLs
+    ```
+    # projectX/xapp/apix/urls.py
+
+    from .views import topic_list, topic_detail 
+
+    urlpatterns = [
+        path('topics/', topic_list),
+        path('topics/<int:pk>/', topic_detail),
+    ]
+    ```
+    Here, we have 2 endpoints `apix/topics/` and `apix/topics/{id}`
+
+    Althought we have defined URL's in `projectX/xapp/apix/urls.py`, but the root URL is still unaware of the new URLs defined. So we need include URL's in `projectX/urls.py`.
+    ```
+    # projectX/urls.py
+
+    urlpatterns = [
+        ...
+        # Hooking apix
+        path('apix/', include('xapp.apix.urls')),
+    ]
+    ```
+    Then execute runserver command,
+    ```
+    $ python manage.py runserver
+    ```
+    Once the server is running, visit 
+    1. http://127.0.0.1:8000/apix/topics
+    2. http://127.0.0.1:8000/apix/topics/1
