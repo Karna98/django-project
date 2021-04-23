@@ -41,6 +41,7 @@ On above premise let's build an REST API's using Django REST Framework.
 
     We are going to set base URL as ***apix/***. So every URL will look like ***/apix/endpoint_described_above***.    
     Since we have defined what will be our endpoints and urls, lets proceed with coding.
+
 2. Create new file **urls.py** and **serializers.py** in **apix**.
     ```
     - urls.py 
@@ -49,6 +50,7 @@ On above premise let's build an REST API's using Django REST Framework.
         1. In this file we will defined serialization and validation of objects(data) to be send as response or received over request.  
         2. Serialization means converting object to JSON format and Deserialization is vice versa of Serialization.
     ```
+
 3. Hook **apix** to **projectX**  
     For **projectX** to recognize that there are REST API's created using REST framework, we need to add 'rest_framework' to INSTALLED_APPS.
     ```
@@ -59,6 +61,7 @@ On above premise let's build an REST API's using Django REST Framework.
         'rest_framework',
     ]
     ```
+
 4. Now lets start with writing serializers with `ModelSerializers`
     ```
     # projectX/xapp/apix/serializers.py
@@ -66,7 +69,7 @@ On above premise let's build an REST API's using Django REST Framework.
     from ..models import {Model_Name}
     from rest_framework import serializers
 
-    # Serializer Class for Model Topic
+    # Serializer Class for Model {Model_Name}
     class {Model_Name}Serializer(serializers.ModelSerializer):
         class Meta:
             model = {Model_Name}
@@ -110,3 +113,34 @@ On above premise let's build an REST API's using Django REST Framework.
     # Output : b'{"id":8,"title":"Testing Serializers","published_date":"2021-04-23T15:31:31.675606Z"}'
     ```
     - [Serializers](https://www.django-rest-framework.org/api-guide/serializers/)
+
+5. Writing Django Views using Serializers  
+    ```
+    # projectX/xapp/apix/views.py
+
+    def topic_list(request):
+        # List all topics, or create a new topic.
+    
+        if request.method == 'GET':
+            ...
+        elif request.method == 'POST':
+            ...
+
+    def topic_detail(request, pk):
+        # Retrieve, update or delete a topic.
+        
+        try:
+            topic = Topic.objects.get(pk=pk)
+        except Topic.DoesNotExist:
+            return HttpResponse(status=404)
+
+        if request.method == 'GET':
+            ...
+        elif request.method == 'PUT':
+            ...
+        elif request.method == 'DELETE':
+            ...
+    ```
+    In the above layout, we have defined two views viz. list and detail view.
+    1. For List View, it will display all the topic using **GET** Method and also we can create an new topic using **POST** Method.
+    2. For Detail View, it will capture `id` or `pk` from URL and related to specific `id` will display topic using **GET** Method or update details of topic using **PUT** Method or delete topic using **DELETE** Method.
