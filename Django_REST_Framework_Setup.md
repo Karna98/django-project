@@ -25,7 +25,7 @@ We are building REST API's on [Django Project-*projectX*](Django_Notes.md) for *
     # App name is 'apix'
     
     $ cd projectX/xapp
-    $ python manage.py startapp apix
+    $ django-admin startapp apix
     ```
     Observe **apix** is created.
     ```
