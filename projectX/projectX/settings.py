@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Adding 'xapp' to 'projectX'
-    'xapp.apps.XappConfig'
+    'xapp.apps.XappConfig',
+    # REST Framework
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
