@@ -187,6 +187,7 @@ On above premise let's build an REST API's using Django REST Framework.
         return Response(data)  # Renders to content type as requested by the client.
         ```
     - [Status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
 8. Wrapping API views [🔗](https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#wrapping-api-views)
     > REST framework provides two wrappers you can use to write API views.  
         1. The `@api_view` decorator for working with function based views.  
@@ -207,4 +208,36 @@ On above premise let's build an REST API's using Django REST Framework.
         # Retrieve, update or delete a topic.
         # Method Defined for 'GET', 'PUT', 'DELETE'
     ```
-    Try to remove 'GET' from list of allowed method and observe the response. 
+    Try to remove 'GET' from list of allowed method and observe the response.
+
+9. Rewriting our API using class-based views [🔗](https://www.django-rest-framework.org/tutorial/3-class-based-views/#rewriting-our-api-using-class-based-views)
+    - Rewriting our API using class-based views
+        ```
+        # projectX/xapp/apix/views.py
+
+        # Class To be linked in urls.py
+        class TopicList(APIView):
+            # Each class contains different types of views
+            def get(self, request):
+                topics = Topic.objects.all()
+                serializer = TopicSerializer(topics, many=True)
+                return Response(serializer.data, safe=False)
+
+            def post(self, request):
+                serializer = TopicSerializer(data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        ```
+        and 
+        ```
+        # projectX/xapp/apix/urls.py
+
+        urlpatterns = [
+            path('topics/', TopicList.as_view()),
+        ]
+        ```
+
+10. Authentication & Permissions [🔗](https://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/#tutorial-4-authentication-permissions)
+    Refer this link to understand how it works

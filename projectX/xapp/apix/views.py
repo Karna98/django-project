@@ -1,53 +1,55 @@
 from django.http import HttpResponse, JsonResponse
-from rest_framework.decorators import api_view
+from django.http.response import Http404
+from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from rest_framework.views import APIView
 from ..models import Topic, Opinion
 from .serializers import TopicSerializer, OpinionSerializer
 
 # Create your views here.
 
-@api_view(['GET', 'POST'])
-def topic_list(request):
+class TopicList(APIView):
     """
     List all topics, or create a new topic.
     """
-    if request.method == 'GET':
+    def get(self, request):
         topics = Topic.objects.all()
         serializer = TopicSerializer(topics, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = TopicSerializer(data=data)
+    def post(self, request):
+        serializer = TopicSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def topic_detail(request, pk):
+class TopicDetail(APIView):
     """
     Retrieve, update or delete a topic.
     """
-    try:
-        topic = Topic.objects.get(pk=pk)
-    except Topic.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+    def get_object(self, pk):
+        try:
+            topic = Topic.objects.get(pk=pk)
+        except Topic.DoesNotExist:
+            raise Http404
 
-    if request.method == 'GET':
+    def get(self, request, pk):
+        topic = self.get_object(pk)
         serializer = TopicSerializer(topic)
-        return JsonResponse(serializer.data)
+        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = TopicSerializer(topic, data=data)
+    def put(self, request, pk):
+        topic = self.get_object(pk)
+        serializer = TopicSerializer(topic, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk):
+        topic = self.get_object(pk)
         topic.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
