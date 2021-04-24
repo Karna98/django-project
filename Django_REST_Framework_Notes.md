@@ -175,3 +175,36 @@ On above premise let's build an REST API's using Django REST Framework.
     Once the server is running, visit 
     1. http://127.0.0.1:8000/apix/topics
     2. http://127.0.0.1:8000/apix/topics/1
+
+7. Requests and Responses [🔗](https://www.django-rest-framework.org/tutorial/2-requests-and-responses/)  
+    - Request objects
+        ```
+        request.POST  # Only handles form data.  Only works for 'POST' method.
+        request.data  # Handles arbitrary data.  Works for 'POST', 'PUT' and 'PATCH' methods.
+        ```
+    - Response objects
+        ```
+        return Response(data)  # Renders to content type as requested by the client.
+        ```
+    - [Status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+8. Wrapping API views [🔗](https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#wrapping-api-views)
+    > REST framework provides two wrappers you can use to write API views.  
+        1. The `@api_view` decorator for working with function based views.  
+        2. The APIView class for working with class-based views.
+    
+    ```
+    # projectX/xapp/apix/views.py
+
+    from django.views.decorators.csrf import api_view
+
+    @api_view(['GET', 'POST'])
+    def topic_list(request):
+        # List all topics, or create a new topic.
+        # Method Defined for 'GET', 'POST' 
+
+    @api_view(['GET', 'PUT', 'DELETE'])
+    def topic_detail(request, pk):
+        # Retrieve, update or delete a topic.
+        # Method Defined for 'GET', 'PUT', 'DELETE'
+    ```
+    Try to remove 'GET' from list of allowed method and observe the response. 
