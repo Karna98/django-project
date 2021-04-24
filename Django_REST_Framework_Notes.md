@@ -1,10 +1,10 @@
 # Notes
 
-Before Starting, read article about [Best Coding Practices For Rest API Design](https://www.geeksforgeeks.org/best-coding-practices-for-rest-api-design/)
+Before Starting, read the article about [Best Coding Practices For Rest API Design](https://www.geeksforgeeks.org/best-coding-practices-for-rest-api-design/)
 
 Link : [Django REST Framework](https://www.django-rest-framework.org/)
 
-Preview of what we have setup in Django Project 
+Preview of what we have set up in Django Project 
 ```
     In Django, we set up **projectX** and hook an application **xapp**.
     xapp is simple application which has following models
@@ -18,11 +18,11 @@ Preview of what we have setup in Django Project
         - opinion
         - votes 
     
-    Topic can have multiple opinions and each opinion has total no of votes.
+    A Topic can have multiple opinions and each opinion has a total no of votes.
 ```
-On above premise let's build an REST API's using Django REST Framework.
+On the above premise let's build a REST API's using Django REST Framework.
 
-1. Lets first decide endpoints of API's we have to work.
+1. Let's first decide the endpoints of API's we have to work on.
 
     | EndPoints | Method | Description |
     | --------- | ------ | ----------- |
@@ -40,19 +40,19 @@ On above premise let's build an REST API's using Django REST Framework.
     | */opinions/{**id**}/topic* | GET | Display topic related to opinion with ID = `id` |
 
     We are going to set base URL as ***apix/***. So every URL will look like ***/apix/endpoint_described_above***.    
-    Since we have defined what will be our endpoints and urls, lets proceed with coding.
+    Since we have defined what will be our endpoints and URLs, let's proceed with coding.
 
-2. Create new file **urls.py** and **serializers.py** in **apix**.
+2. Create new file **urls.py** and **serializers.py** in **apix**. [🔗](https://www.django-rest-framework.org/tutorial/1-serialization/#tutorial-1-serialization)
     ```
     - urls.py 
         1. In this file we will list all endpoints.
     - serializers.py 
-        1. In this file we will defined serialization and validation of objects(data) to be send as response or received over request.  
-        2. Serialization means converting object to JSON format and Deserialization is vice versa of Serialization.
+        1. In this file we will define serialization and validation of objects(data) to be sent as a response or received over request.  
+        2. Serialization means converting an object to JSON format and Deserialization is vice versa of Serialization.
     ```
 
 3. Hook **apix** to **projectX**  
-    For **projectX** to recognize that there are REST API's created using REST framework, we need to add 'rest_framework' to INSTALLED_APPS.
+    For **projectX** to recognize that there are REST API's created using the REST framework, we need to add 'rest_framework' to INSTALLED_APPS.
     ```
     # projectX/settings.py
 
@@ -62,7 +62,7 @@ On above premise let's build an REST API's using Django REST Framework.
     ]
     ```
 
-4. Now lets start with writing serializers with `ModelSerializers`
+4. Now let's start with writing serializers with `ModelSerializers`
     ```
     # projectX/xapp/apix/serializers.py
 
@@ -119,7 +119,7 @@ On above premise let's build an REST API's using Django REST Framework.
     # projectX/xapp/apix/views.py
 
     def topic_list(request):
-        # List all topics, or create a new topic.
+        # List all topics or create a new topic.
     
         if request.method == 'GET':
             ...
@@ -142,8 +142,8 @@ On above premise let's build an REST API's using Django REST Framework.
             ...
     ```
     In the above layout, we have defined two views viz. list and detail view.
-    1. For List View, it will display all the topic using **GET** Method and also we can create an new topic using **POST** Method.
-    2. For Detail View, it will capture `id` or `pk` from URL and related to specific `id` will display topic using **GET** Method or update details of topic using **PUT** Method or delete topic using **DELETE** Method.
+    1. For List View, it will display all the topic using **GET** Method and also we can create a new topic using **POST** Method.
+    2. For Detail View, it will capture `id` or `pk` from URL and related to specific `id` will display topic using **GET** Method or update details of the topic using **PUT** Method or delete topic using **DELETE** Method.
 
 6. Defining URLs
     ```
@@ -158,7 +158,7 @@ On above premise let's build an REST API's using Django REST Framework.
     ```
     Here, we have 2 endpoints `apix/topics/` and `apix/topics/{id}`
 
-    Althought we have defined URL's in `projectX/xapp/apix/urls.py`, but the root URL is still unaware of the new URLs defined. So we need include URL's in `projectX/urls.py`.
+    Although we have defined URL's in `projectX/xapp/apix/urls.py`, the root URL is still unaware of the new URLs defined. So we need to include URLs in `projectX/urls.py`.
     ```
     # projectX/urls.py
 
@@ -180,7 +180,7 @@ On above premise let's build an REST API's using Django REST Framework.
     - Request objects
         ```
         request.POST  # Only handles form data.  Only works for 'POST' method.
-        request.data  # Handles arbitrary data.  Works for 'POST', 'PUT' and 'PATCH' methods.
+        request.data  # Handles arbitrary data.  Works for the 'POST', 'PUT' and 'PATCH' methods.
         ```
     - Response objects
         ```
@@ -190,7 +190,7 @@ On above premise let's build an REST API's using Django REST Framework.
 
 8. Wrapping API views [🔗](https://www.django-rest-framework.org/tutorial/2-requests-and-responses/#wrapping-api-views)
     > REST framework provides two wrappers you can use to write API views.  
-        1. The `@api_view` decorator for working with function based views.  
+        1. The `@api_view` decorator for working with function-based views.  
         2. The APIView class for working with class-based views.
     
     ```
@@ -208,7 +208,7 @@ On above premise let's build an REST API's using Django REST Framework.
         # Retrieve, update or delete a topic.
         # Method Defined for 'GET', 'PUT', 'DELETE'
     ```
-    Try to remove 'GET' from list of allowed method and observe the response.
+    Try to remove 'GET' from the list of allowed method and observe the response.
 
 9. Rewriting our API using class-based views [🔗](https://www.django-rest-framework.org/tutorial/3-class-based-views/#rewriting-our-api-using-class-based-views)
     - Rewriting our API using class-based views
@@ -238,6 +238,76 @@ On above premise let's build an REST API's using Django REST Framework.
             path('topics/', TopicList.as_view()),
         ]
         ```
+        - [Using mixins](https://www.django-rest-framework.org/tutorial/3-class-based-views/#using-mixins)
+        - [Using generic class-based views](https://www.django-rest-framework.org/tutorial/3-class-based-views/#using-generic-class-based-views)
 
 10. Authentication & Permissions [🔗](https://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/#tutorial-4-authentication-permissions)
-    Refer this link to understand how it works
+    Refer to this link to understand how it works.
+
+11. Creating an endpoint for the root of our API [🔗](https://www.django-rest-framework.org/tutorial/5-relationships-and-hyperlinked-apis/#creating-an-endpoint-for-the-root-of-our-api) 
+    Refer to this link to understand how it works.
+
+12. Refactoring to use ViewSets [🔗](https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/#refactoring-to-use-viewsets)
+    - Using ViewSet,
+        ```
+        # projectX/xapp/apix/views.py
+
+        class TopicViewSet(viewsets.ReadOnlyModelViewSet):
+            """
+            This viewset automatically provides `list` and `retrieve` actions.
+            """
+            queryset = Topic.objects.all()
+            serializer_class = TopicSerializer
+
+        class TopicDetailViewSet(viewsets.ModelViewSet):
+            """
+            This viewset automatically provides `list`, `create`, `retrieve`,
+            `update` and `destroy` actions.
+            """
+            lookup_field = 'pk'
+            queryset = Topic.objects.all()
+            serializer_class = TopicSerializer
+        ```
+    - [Binding ViewSets to URLs explicitly](https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/#binding-viewsets-to-urls-explicitly)
+        ```
+        # projectX/xapp/apix/urls.py
+
+        urlpatterns = [
+            path('topics/',
+                TopicViewSet.as_view({
+                    'get': 'list'
+                }),
+                name='topic-list'
+            ),
+            path('topics/<int:pk>/',
+                TopicDetailViewSet.as_view({
+                    'get': 'retrieve',
+                    'post': 'create',
+                    'patch': 'partial_update',
+                    'delete': 'destroy'
+                }),
+                name='topic-detail'
+            ),
+        ]
+        ```
+    - [Using Routers](https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/#using-routers)
+        ```
+        # projectX/xapp/apix/urls.py
+
+        from rest_framework.routers import DefaultRouter
+
+        # Create a router and register our viewsets with it.
+        router = DefaultRouter()
+        router.register(r'topics',TopicDetailViewSet)
+
+        urlpatterns = [
+            path('', include(router.urls)),
+        ]
+        ```
+    Now visit all the Endpoints and check if it works.
+
+    > **Trade-offs between views vs viewsets**  
+        1. Using viewsets can be a really useful abstraction. It helps ensure that URL conventions will be consistent across your API, minimizes the amount of code you need to write, and allows you to concentrate on the interactions and representations your API provides rather than the specifics of the URL conf.   
+        2. That doesn't mean it's always the right approach to take. There's a similar set of trade-offs to consider as when using class-based views instead of function based views. Using viewsets is less explicit than building your views individually.
+
+In this part, we dealt with the Topic table only. Implement all the Endpoints described at the start can be extended as part of learning and practice.
